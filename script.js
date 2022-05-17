@@ -81,47 +81,43 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
-/*
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcDisplayBalance(account1.movements);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-*/
-/////////////////////////////////////////////////
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}`;
 
-/*
-let arr = ['a', 'b', 'c', 'd', 'e'];
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}`;
 
-console.log(arr.slice(2));
-console.log(arr.slice(2, 4));
-console.log(arr.slice(-2));
-console.log(arr.slice(-1));
-console.log(arr.slice(1, -2));
-console.log(arr.slice());
-console.log([...arr]);
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}`;
+};
+calcDisplaySummary(account1.movements);
 
-// SPLICE
-console.log(arr.splice(2));
-arr.splice(1, 2);
-console.log(arr);
+calcDisplaySum(account1.movements);
 
-//REVERSE
-arr = ['a', 'b', 'c', 'd', 'e'];
-const arr2 = ['j', 'i', 'h', 'g', 'f'];
-console.log(arr2.reverse());
-console.log(arr2);
-
-//COCAT
-const letters = arr.concat(arr2);
-console.log(letters);
-console.log([...arr, ...arr2]);
-
-//JOIN
-console.log(letters.join(' - '));
-*/
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
